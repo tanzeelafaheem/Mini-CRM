@@ -1,11 +1,9 @@
-const express = require('express');
-const router = express.Router();
+const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../models/User');
 
-// Register
-router.post('/register', async (req, res) => {
+// Register new user
+exports.register = async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
@@ -26,10 +24,10 @@ router.post('/register', async (req, res) => {
     console.error(err.message);
     res.status(500).send('Server error');
   }
-});
+};
 
-// Login
-router.post('/login', async (req, res) => {
+// Login user
+exports.login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
@@ -47,6 +45,4 @@ router.post('/login', async (req, res) => {
     console.error(err.message);
     res.status(500).send('Server error');
   }
-});
-
-module.exports = router;
+};
