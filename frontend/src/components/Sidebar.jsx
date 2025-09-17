@@ -22,7 +22,7 @@ export default function Sidebar({ logout }) {
     <div style={sidebarStyle}>
       <div style={linkStyle} onClick={() => navigate("/dashboard")}>Dashboard</div>
       <div style={linkStyle} onClick={() => navigate("/dashboard/customers")}>Customers</div>
-      <div style={linkStyle} onClick={() => navigate("/dashboard/leads")}>Leads</div>
+      {/* <div style={linkStyle} onClick={() => navigate("/dashboard/leads")}>Leads</div> */}
       <div style={{ ...linkStyle, color: "red" }} onClick={logout}>Logout</div>
     </div>
   );

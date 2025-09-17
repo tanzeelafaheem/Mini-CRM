@@ -4,6 +4,7 @@ const leadController = require('../controllers/leadController');
 const auth = require('../middleware/auth');
 
 // Routes
+router.get('/all', auth, leadController.getAllLeads);
 router.post('/:customerId', auth, leadController.createLead);         
 router.get('/:customerId', auth, leadController.getLeadsByCustomer); 
 router.put('/:id', auth, leadController.updateLead);                 

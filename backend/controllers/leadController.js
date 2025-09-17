@@ -1,5 +1,16 @@
 const Lead = require('../models/Lead');
 
+// Get all leads (for admin or general view)
+exports.getAllLeads = async (req, res) => {
+  try {
+    const leads = await Lead.find(); // fetch all leads
+    res.json(leads);
+  } catch (err) {
+    res.status(400).json({ msg: err.message });
+  }
+};
+
+
 // Create a new lead for a customer
 exports.createLead = async (req, res) => {
   try {
