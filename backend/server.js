@@ -14,6 +14,8 @@ app.use('/api/user', require('./routes/user'));
 
 app.use('/api/customers', require('./routes/customer'));
 
+app.use('/api/leads', require('./routes/lead'));
+
 
 app.get('/', (req, res) => {
   res.send('Mini-CRM API is running...');
