@@ -16,10 +16,19 @@ exports.register = async (req, res) => {
     user = new User({ name, email, passwordHash });
     await user.save();
 
+
     const payload = { userId: user._id };
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    res.json({ token });
+    res.json({
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role || "User"
+      }
+    });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error');
@@ -40,7 +49,16 @@ exports.login = async (req, res) => {
     const payload = { userId: user._id };
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    res.json({ token });
+
+    res.json({
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role || "User"
+      }
+    });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error');
