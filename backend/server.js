@@ -7,6 +7,11 @@ dotenv.config();
 connectDB();
 
 const app = express();
+
+app.use(cors({
+  origin: 'https://mini-crm-1-1ur8.onrender.com', 
+  credentials: true
+}));
 app.use(express.json());
 
 app.use('/api/user', require('./routes/user'));
@@ -20,10 +25,6 @@ app.get('/', (req, res) => {
   res.send('Mini-CRM API is running...');
 });
 
-app.use(cors({
-  origin: 'https://mini-crm-1-1ur8.onrender.com', 
-  credentials: true
-}));
 
 
 const PORT = process.env.PORT || 5000;
