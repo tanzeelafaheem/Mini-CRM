@@ -21,5 +21,12 @@ app.get('/', (req, res) => {
   res.send('Mini-CRM API is running...');
 });
 
+const cors = require('cors');
+app.use(cors({
+  origin: 'https://mini-crm-1-1ur8.onrender.com', 
+  credentials: true
+}));
+
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
