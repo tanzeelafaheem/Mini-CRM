@@ -62,19 +62,19 @@ export default function LeadsPage({ customer }) {
     }
   };
 
-  const formStyle = { display: "flex", gap: "10px", marginBottom: "20px" };
-  const inputStyle = { padding: "5px", flex: 1 };
-  const selectStyle = { padding: "5px" };
-  const buttonStyle = { padding: "5px 10px", cursor: "pointer" };
-  const thTdStyle = { border: "1px solid #ccc", padding: "8px" };
+  const formStyle = { display: "flex", gap: "10px", marginBottom: "20px", flexWrap: "wrap" };
+  const inputStyle = { padding: "8px 10px", flex: 1, borderRadius: "6px", border: "1px solid #ddd" };
+  const selectStyle = { padding: "8px 10px", borderRadius: "6px", border: "1px solid #ddd" };
+  const buttonStyle = { padding: "8px 14px", border: "none", borderRadius: "6px", cursor: "pointer", fontWeight: "bold" };
 
   if (!customer) return <p>Please select a customer first.</p>;
 
   return (
     <div>
-      <h2>Leads for {customer.name}</h2>
+      <h2 style={{ color: "#1E40AF", marginBottom: "15px" }}>Leads for {customer.name}</h2>
       {error && <p style={{ color: "red" }}>{error}</p>}
 
+      {/* Lead Form */}
       <form style={formStyle} onSubmit={handleSubmit}>
         <input style={inputStyle} name="title" placeholder="Title" value={form.title} onChange={handleChange} required />
         <input style={inputStyle} name="description" placeholder="Description" value={form.description} onChange={handleChange} />
@@ -85,35 +85,55 @@ export default function LeadsPage({ customer }) {
           <option value="Converted">Converted</option>
           <option value="Lost">Lost</option>
         </select>
-        <button style={buttonStyle} type="submit">{editId ? "Update" : "Add"}</button>
+        <button style={{ ...buttonStyle, background: "#1E40AF", color: "#fff" }} type="submit">
+          {editId ? "Update" : "Add"}
+        </button>
       </form>
 
-      {loading ? <p>Loading...</p> : (
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
-          <thead>
-            <tr>
-              <th style={thTdStyle}>Title</th>
-              <th style={thTdStyle}>Description</th>
-              <th style={thTdStyle}>Status</th>
-              <th style={thTdStyle}>Value</th>
-              <th style={thTdStyle}>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {leads.map(l => (
-              <tr key={l._id}>
-                <td style={thTdStyle}>{l.title}</td>
-                <td style={thTdStyle}>{l.description}</td>
-                <td style={thTdStyle}>{l.status}</td>
-                <td style={thTdStyle}>{l.value}</td>
-                <td style={thTdStyle}>
-                  <button style={{ ...buttonStyle, marginRight: "5px" }} onClick={() => handleEdit(l)}>Edit</button>
-                  <button style={{ ...buttonStyle, backgroundColor: "red", color: "white" }} onClick={() => handleDelete(l._id)}>Delete</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      {/* Leads Table */}
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <div style={{ borderRadius: "12px", overflow: "hidden", boxShadow: "0 4px 12px rgba(0,0,0,0.05)" }}>
+          {leads.length === 0 ? (
+            <p style={{ textAlign: "center", padding: "20px", color: "#6B7280" }}>No leads available</p>
+          ) : (
+            <table style={{ width: "100%", borderCollapse: "separate", borderSpacing: "0" }}>
+              <thead>
+                <tr style={{ background: "#f3f4f6", color: "#1E40AF", textAlign: "left" }}>
+                  <th style={{ padding: "12px" }}>Title</th>
+                  <th style={{ padding: "12px" }}>Description</th>
+                  <th style={{ padding: "12px" }}>Status</th>
+                  <th style={{ padding: "12px" }}>Value</th>
+                  <th style={{ padding: "12px" }}>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {leads.map((l, index) => (
+                  <tr
+                    key={l._id}
+                    style={{
+                      background: index % 2 === 0 ? "#ffffff" : "#f9fafb",
+                      transition: "background 0.2s",
+                      cursor: "default",
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.background = "#e0f2fe")}
+                    onMouseLeave={(e) => (e.currentTarget.style.background = index % 2 === 0 ? "#ffffff" : "#f9fafb")}
+                  >
+                    <td style={{ padding: "12px" }}>{l.title}</td>
+                    <td style={{ padding: "12px" }}>{l.description}</td>
+                    <td style={{ padding: "12px", fontWeight: "500" }}>{l.status}</td>
+                    <td style={{ padding: "12px" }}>{l.value}</td>
+                    <td style={{ padding: "12px" }}>
+                      <button style={{ ...buttonStyle, marginRight: "8px", background: "#2563EB", color: "#fff" }} onClick={() => handleEdit(l)}>Edit</button>
+                      <button style={{ ...buttonStyle, background: "#EF4444", color: "#fff" }} onClick={() => handleDelete(l._id)}>Delete</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
       )}
     </div>
   );

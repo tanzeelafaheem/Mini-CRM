@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../axios";
 
-export default function CustomersPage({setSelectedCustomer}) {
+export default function CustomersPage({ setSelectedCustomer }) {
   const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState({ name: "", email: "", phone: "", company: "" });
@@ -61,57 +61,92 @@ export default function CustomersPage({setSelectedCustomer}) {
     }
   };
 
-const viewLeads = (c) => {
-  setSelectedCustomer(c);       
-  navigate("/dashboard/leads"); 
-};
+  const viewLeads = (c) => {
+    setSelectedCustomer(c);
+    navigate("/dashboard/leads");
+  };
 
-
-  const formStyle = { display: "flex", gap: "10px", marginBottom: "20px" };
-  const inputStyle = { padding: "5px", flex: 1 };
-  const buttonStyle = { padding: "5px 10px", cursor: "pointer" };
-  const thTdStyle = { border: "1px solid #ccc", padding: "8px" };
+  // Form and button styles
+  const formStyle = { display: "flex", gap: "10px", marginBottom: "20px", flexWrap: "wrap" };
+  const inputStyle = { padding: "8px 10px", flex: 1, borderRadius: "6px", border: "1px solid #ddd" };
+  const buttonStyle = { padding: "8px 14px", border: "none", borderRadius: "6px", cursor: "pointer", fontWeight: "bold" };
 
   return (
     <div>
-      <h2>Customers</h2>
+      <h2 style={{ color: "#1E40AF", marginBottom: "15px" }}>Customers</h2>
       {error && <p style={{ color: "red" }}>{error}</p>}
 
+      {/* Customer Form */}
       <form style={formStyle} onSubmit={handleSubmit}>
         <input style={inputStyle} name="name" placeholder="Name" value={form.name} onChange={handleChange} required />
         <input style={inputStyle} name="email" placeholder="Email" value={form.email} onChange={handleChange} required />
         <input style={inputStyle} name="phone" placeholder="Phone" value={form.phone} onChange={handleChange} />
         <input style={inputStyle} name="company" placeholder="Company" value={form.company} onChange={handleChange} />
-        <button style={buttonStyle} type="submit">{editId ? "Update" : "Add"}</button>
+        <button style={{ ...buttonStyle, background: "#1E40AF", color: "#fff" }} type="submit">
+          {editId ? "Update" : "Add"}
+        </button>
       </form>
 
-      {loading ? <p>Loading...</p> : (
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
-          <thead>
-            <tr>
-              <th style={thTdStyle}>Name</th>
-              <th style={thTdStyle}>Email</th>
-              <th style={thTdStyle}>Phone</th>
-              <th style={thTdStyle}>Company</th>
-              <th style={thTdStyle}>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {customers.map(c => (
-              <tr key={c._id}>
-                <td style={thTdStyle}>{c.name}</td>
-                <td style={thTdStyle}>{c.email}</td>
-                <td style={thTdStyle}>{c.phone}</td>
-                <td style={thTdStyle}>{c.company}</td>
-                <td style={thTdStyle}>
-                  <button style={{ ...buttonStyle, marginRight: "5px" }} onClick={() => viewLeads(c)}>View Leads</button>
-                  <button style={{ ...buttonStyle, marginRight: "5px" }} onClick={() => handleEdit(c)}>Edit</button>
-                  <button style={{ ...buttonStyle, backgroundColor: "red", color: "white" }} onClick={() => handleDelete(c._id)}>Delete</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      {/* Customers Table */}
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <div style={{ borderRadius: "12px", overflow: "hidden", boxShadow: "0 4px 12px rgba(0,0,0,0.05)" }}>
+          {customers.length === 0 ? (
+            <p style={{ textAlign: "center", padding: "20px", color: "#6B7280" }}>No customers available</p>
+          ) : (
+            <table style={{ width: "100%", borderCollapse: "separate", borderSpacing: "0" }}>
+              <thead>
+                <tr style={{ background: "#f3f4f6", color: "#1E40AF", textAlign: "left" }}>
+                  <th style={{ padding: "12px" }}>Name</th>
+                  <th style={{ padding: "12px" }}>Email</th>
+                  <th style={{ padding: "12px" }}>Phone</th>
+                  <th style={{ padding: "12px" }}>Company</th>
+                  <th style={{ padding: "12px" }}>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {customers.map((c, index) => (
+                  <tr
+                    key={c._id}
+                    style={{
+                      background: index % 2 === 0 ? "#ffffff" : "#f9fafb",
+                      transition: "background 0.2s",
+                      cursor: "default",
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.background = "#e0f2fe")}
+                    onMouseLeave={(e) => (e.currentTarget.style.background = index % 2 === 0 ? "#ffffff" : "#f9fafb")}
+                  >
+                    <td style={{ padding: "12px" }}>{c.name}</td>
+                    <td style={{ padding: "12px" }}>{c.email}</td>
+                    <td style={{ padding: "12px" }}>{c.phone}</td>
+                    <td style={{ padding: "12px" }}>{c.company}</td>
+                    <td style={{ padding: "12px" }}>
+                      <button
+                        style={{ ...buttonStyle, marginRight: "8px", background: "#2563EB", color: "#fff" }}
+                        onClick={() => viewLeads(c)}
+                      >
+                        View Leads
+                      </button>
+                      <button
+                        style={{ ...buttonStyle, marginRight: "8px", background: "#177c57", color: "#fff" }}
+                        onClick={() => handleEdit(c)}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        style={{ ...buttonStyle, background: "#EF4444", color: "#fff" }}
+                        onClick={() => handleDelete(c._id)}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
       )}
     </div>
   );
